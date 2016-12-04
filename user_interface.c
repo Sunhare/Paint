@@ -31,7 +31,7 @@ void get_command(char*** board, int num_rows, int num_cols){
 	char command[10];
 	printf("Enter your command: ");\
 	scanf("%s", command);
-	
+
 	if(command[0] == 'q'){
 		destroy_board(*board, num_rows);
 		exit(0);
@@ -47,17 +47,21 @@ void get_command(char*** board, int num_rows, int num_cols){
 		get_command(board, num_rows, num_cols);
 	}else if(command[0] == 'r'){
 		resize_board(command, board, num_rows, num_cols);
-		print_board(*board, command[1]-'0', command[2] - '0');
+		num_rows = command[1] - '0';
+		num_cols = command[2] - '0';
+		print_board(*board, num_rows, num_cols);
 		get_command(board, num_rows, num_cols);
 	}
 	else if(command[0] == 'a'){
 		if(command[1] == 'r'){
 			add_single_row(command, board, num_rows, num_cols);
-			print_board(*board, num_rows + 1, num_cols);
+			num_rows = num_rows + 1;
+			print_board(*board, num_rows, num_cols);
 		}
 		else{
 			add_single_col(command, board, num_rows, num_cols);
-			print_board(*board, num_rows, num_cols + 1);
+			num_cols = num_cols + 1;
+			print_board(*board, num_rows, num_cols);
 		}
 		get_command(board, num_rows, num_cols);
 
@@ -65,11 +69,13 @@ void get_command(char*** board, int num_rows, int num_cols){
 	else if(command[0] == 'd'){
 		if(command[1] == 'r'){
 			delete_single_row(command, board, num_rows, num_cols);
-			print_board(*board, num_rows-1, num_cols);
+			num_rows = num_rows - 1;
+			print_board(*board, num_rows, num_cols);
 		}
 		else{
 			delete_single_col(command, board, num_rows, num_cols);
-			print_board(*board, num_rows, num_cols-1);
+			num_cols = num_cols - 1;
+			print_board(*board, num_rows, num_cols);
 		}
 		get_command(board, num_rows, num_cols);
 
