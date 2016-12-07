@@ -89,103 +89,99 @@ char** read_user_input(){
     return all_commands;
 }
 
+int length_command(char** command){
+	int i = 0;
+	int count = 0;
 
+	while(command[i] != NULL){
+		count++;
+		i++;
+	}	
+	return count;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void input_incorrect(char** board, int num_rows, int num_cols, char** command, int args_needed, char* error_statement){
+	if(length_command(command) != args_needed){
+			printf("%s\n", error_statement);
+			print_board(board, num_rows, num_cols);
+			get_command(board, num_rows, num_cols);
+		}
+}
+void check_input_range(char** command, int num_checks, char* error_statement, int num_rows, int num_cols, char** board){
+	int i;
+	//atoi returns 0 if theres no digits remember this
+	for(i = 1; i <= num_checks; i++){
+		if(atoi(command[i]) > num_rows || atoi(command[i]) < 0){
+			printf("%s\n", error_statement);
+			print_board(board, num_rows, num_cols);
+			get_command(board, num_rows, num_cols);
+			i++;
+		}
+	}
+	for(i = 2; i <= num_checks; ++i){
+		if(atoi(command[i]) > num_cols || atoi(command[i]) < 0){
+		printf("%s\n", error_statement);
+		print_board(board, num_rows, num_cols);
+		get_command(board, num_rows, num_cols);
+		i++;
+		}	
+	}
+}
 void get_command(char** board, int num_rows, int num_cols){
 	char** command;
 
 	command = read_user_input();
-	// printf("Size of Command: %lu\n", sizeof(command));
 
-	// printf("Your command:\n");
-
-	// int i=0;
-	// int count= 0;
-
-	//Counts how many elements of command there are
-	// while(command[i] != NULL){
-	// 	count+= 1;
-	// 	i++;
-	// }
-
-
-	// for(int i = 0; i<count; i++){
-	// 	printf("%s", command[i]);
-	// }
-	// printf("\n");
-
-	// printf("Command at [0][0] : %c\n", command[0][0]);
-	// printf("Command at 1      : %s\n", command[1]);
-	// printf("Command at 2      : %s\n", command[2]);
-	// printf("Command at 3      : %s\n", command[3]);
-	// printf("Command at 4      : %s\n", command[4]);
-
+	if(strlen(command[0] != 1)){
+		printf("Unrecognized command. Type h for help.\n");
+		get_command(board, num_rows, num_cols);
+	}
 
 	if(command[0][0] == 'q'){
-		// printf("Entered Quit\n");
+		input_incorrect(board, num_rows, num_cols, command, 1, "Unrecognized command. Type h for help.");
 		destroy_board(board, num_rows);
 		exit(0);
 	}
 	else if(command[0][0] == 'h'){
-		// printf("Entered Help\n");
+		input_incorrect(board, num_rows, num_cols, command, 1, "Unrecognized command. Type h for help.");
 		print_help();
 		get_command(board, num_rows, num_cols);
 
-	}
-	else if(command[0][0] == 'w'){
-		// printf("Entered Write\n");
+	}else if(command[0][0] == 'w'){
+		input_incorrect(board, num_rows, num_cols, command, 5, "Improper draw command.");
+		check_input_range(command, 4, "Improper draw command.", num_rows, num_cols, board);
 		write_line(command, board, num_rows, num_cols);
 		print_board(board, num_rows, num_cols);
 		get_command(board, num_rows, num_cols);
 
 	}
 	else if(command[0][0] == 'e'){
-		// printf("Entered Erase\n");
+		input_incorrect(board, num_rows, num_cols, command, 3, "Improper erase command.");
+		check_input_range(command, 2, "Improper erase command.", num_rows, num_cols, board);
 		erase_point(command, board, num_rows, num_cols);
 		print_board(board, num_rows, num_cols);
 		get_command(board, num_rows, num_cols);
-
 	}
 	else if(command[0][0] == 'r'){
-		// printf("Entered Resize\n");
+		input_incorrect(board, num_rows, num_cols, command, 3, "Improper resize command.");
+		check_input_range(command, 3, "Improper resize command.", num_rows, num_cols, board);
 		resize_board(command, board, num_rows, num_cols);
-		// printf("Before the atoi\n");
 		num_rows = atoi(command[1]);
 		num_cols = atoi(command[2]);
-		// printf("After the atoi\n");
-
-		// printf("Before the print_board\n");
 		print_board(board, num_rows, num_cols);
-		// printf("After the print_board\n");
-
-		
 		get_command(board, num_rows, num_cols);
 
 	}
 
 	else if(command[0][0] == 'a'){
+		input_incorrect(board, num_rows, num_cols, command, 3, "Improper add command.");
+		check_input_range(command, 2, "Improper add command.", num_rows, num_cols, board);
 		if(command[1][0] == 'r'){
-			// printf("Entered Add Row\n");
 			add_single_row(command, board, num_rows, num_cols);
 			num_rows = num_rows + 1;
 			print_board(board, num_rows, num_cols);
 		}
 		else if(command[1][0] == 'c'){
-			// printf("Entered Add Column\n");
 			add_single_col(command, board, num_rows, num_cols);
 			num_cols = num_cols + 1;
 			print_board(board, num_rows, num_cols);
@@ -194,14 +190,14 @@ void get_command(char** board, int num_rows, int num_cols){
 	}
 
 	else if(command[0][0] == 'd'){
+		input_incorrect(board, num_rows, num_cols, command, 3, "Improper delete command.");
+		check_input_range(command, 2, "Improper delete command.", num_rows, num_cols, board);
 		if(command[1][0] == 'r'){
-			// printf("Entered Delete Row\n");
 			delete_single_row(command, board, num_rows, num_cols);
 			num_rows = num_rows - 1;
 			print_board(board, num_rows, num_cols);
 		}
 		else if(command[1][0] == 'c'){
-			// printf("Entered Delete Column\n");
 			delete_single_col(command, board, num_rows, num_cols);
 			num_cols = num_cols - 1;
 			print_board(board, num_rows, num_cols);
@@ -211,13 +207,12 @@ void get_command(char** board, int num_rows, int num_cols){
 	}
 
 	else if(command[0][0] == 's'){
-		// printf("Entered Save\n");
+		input_incorrect(board, num_rows, num_cols, command, 3, "Improper save command or file could not be created.");
 		save_file(board, num_rows, num_cols, command[1]);
-
+		print_board(board, num_rows, num_cols);
+		get_command(board, num_rows, num_cols);
 	}
-	// else if(command[0] == 'l'){
-
-	// }
-
+	//else if(command[0] == 'l'){}
 }
+
 
