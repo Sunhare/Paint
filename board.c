@@ -7,6 +7,16 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+
+// typedef Board_Struct{
+// 	char** the_board;
+// 	int num_rows;
+// 	int num_cols;
+// } Board;
+
+
+
 int max(int a, int b){
 	return a > b ? a : b;
 }
@@ -23,11 +33,15 @@ void make_board(char*** board, int num_rows, int num_cols){
 	}
 }
 
+
+//BStruct board -> dp_board
+
 void print_board(char** board, int num_rows, int num_cols){
 	// printf("Entered Print Board\n");
 	int i,j;
 	int padding = 0;
 	char str_num[10];
+	// printf("Num Rows: %d", num_rows);
 	
 	sprintf(str_num, "%d", num_rows);
 	padding = strlen(str_num);
@@ -43,7 +57,7 @@ void print_board(char** board, int num_rows, int num_cols){
 		for(j =0; j < num_cols; j++){
 			// printf("2ndL ");
 			// printf("j: %d", j);
-			printf("%*c ", padding,  board[i][j]); 
+			printf("%*c ", padding, board[i][j]); 
 		}
 		printf("\n");
 	}
@@ -64,17 +78,22 @@ void print_board(char** board, int num_rows, int num_cols){
 
 void more_rows(char** board, int num_rows, int num_cols, int rows_new, int cols_new){
 	// printf("Entered More Rows\n");
+	// printf("Num Rows: %d\n", num_rows);
+	// printf("Rows New: %d\n", rows_new);
 	//int rows_added = rows_new - num_rows;
 	int i,j;
 
 	board = (char**)realloc(board, rows_new * sizeof(char*));
 
 	for(i = num_rows; i < rows_new; i++){
+
 		board[i] = (char*)realloc(board[i], num_cols * sizeof(char));
+
 		for(j = 0; j < num_cols; j++){
 			board[i][j] = '*';
 		}
 	}
+
 	// printf("Exited More Rows\n");
 }
 
@@ -85,8 +104,11 @@ void more_cols(char** board, int num_rows, int num_cols, int rows_new, int cols_
 	// printf("Entered More Cols\n");
 	//int cols_added = cols_new - num_cols;
 	int i, j;
+
 	for(i = 0; i < num_rows; i++){
+
 		board[i] = (char*)realloc(board[i], cols_new * sizeof(char));
+
 		for(j = num_cols; j < cols_new; j++){
 			board[i][j] = '*';
 		}
@@ -133,8 +155,9 @@ void add_single_row(char** command, char** board, int num_rows, int num_cols){
 void delete_single_row(char** command, char** board, int num_rows, int num_cols){
 	// printf("Entered Delete Single Row\n");
 	int i, j;
-	
-	for(i = atoi(command[2]) - 1; i < num_rows - 1; i++){
+	//d r 0
+	//i = 0 i < 9
+	for(i = atoi(command[2]); i < num_rows - 1; i++){
 		for(j = 0; j < num_cols; j++){
 			board[i][j] = board[i+1][j];
 		}
@@ -148,7 +171,7 @@ void delete_single_col(char** command, char** board, int num_rows, int num_cols)
 	// printf("Entered Delete Single Col\n");
 	int i, j; 
 
-	for(j = atoi(command[2]) - 1; j < num_cols - 1; j++){
+	for(j = atoi(command[2]); j < num_cols - 1; j++){
 		for(i = 0; i < num_rows; i++){
 			board[i][j] = board[i][j+1];
 		}
@@ -190,7 +213,8 @@ void resize_board(char** command, char** board, int num_rows, int num_cols){
 	// printf("Num_cols: %d\n", num_cols);
 
 	if(rows_new > num_rows){
-		more_rows(board, num_rows, num_cols, rows_new, cols_new);
+		// more_rows(board, num_rows, num_cols, rows_new, cols_new);
+
 	}if(cols_new > num_cols){
 		more_cols(board, num_rows, num_cols, rows_new, cols_new);
 	}if(rows_new < num_rows){

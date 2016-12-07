@@ -8,7 +8,8 @@
 
 
 int main(int argc, char** argv){
-	char** board;
+	char** board = NULL;
+
 	int num_rows = 10;
 	int num_cols = 10;
 	

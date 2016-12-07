@@ -1,6 +1,14 @@
 #ifndef BOARD_H
 	#define BOARD_H
 		int max(int a, int b);
+
+		// typedef struct Board_Struct{
+		// 	char** dp_board;
+		// 	int num_rows = 10;
+		// 	int num_cols = 10;
+		// } BStruct;
+
+
 		void make_board(char*** board, int num_rows, int num_cols);
 		void print_board(char** board, int num_rows, int num_cols);
 
