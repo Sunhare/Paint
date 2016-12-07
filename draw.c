@@ -1,36 +1,44 @@
 #include "draw.h"
 #include "board.h"
+#include "save.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-void write_line(char* command, char*** board, int num_rows, int num_cols){
-	if(command[1] == command[3]){
-		draw_hor(command, *board, num_rows, num_cols);
+void write_line(char** command, char** board, int num_rows, int num_cols){
+	int row1 = atoi(command[1]);
+	int row2 = atoi(command[3]);
+	int col1 = atoi(command[2]);
+	int col2 = atoi(command[4]);
 
-	}else if(command[2] == command[4]){
-		draw_ver(command, *board, num_rows, num_cols);
-	}else if(((command[1] > command[3]) && (command[2] < command[4])) || ((command[1] < command[3]) && (command[2] > command[4]))){
+	if(row1 == row2){
+		draw_hor(command, board, num_rows, num_cols);
+
+	}else if(col1 == col2){
+		draw_ver(command, board, num_rows, num_cols);
+	}else if(((row1 > row2) && (col1 < col2)) || ((row1 < row2) && (col1 > col2))){
 		//left to right neg slope
-		draw_zig(command, *board, num_rows, num_cols);
+		draw_zig(command, board, num_rows, num_cols);
 	}else{
-		draw_zag(command, *board, num_rows, num_cols);
+		draw_zag(command, board, num_rows, num_cols);
 	}
 }
-void erase_point(char* command, char** board, int num_rows, int num_cols){
-	int row = command[1] - '0';
-	int col = command[2] - '0';
+void erase_point(char** command, char** board, int num_rows, int num_cols){
+	int row = atoi(command[1]);
+	int col = atoi(command[2]);
 	if(board[row][col] != '*'){
 		board[row][col] = '*';
 	}
 }
 
 //Draws a point or a horizontal line
-void draw_hor(char* command, char** board, int num_rows, int num_cols){
+void draw_hor(char** command, char** board, int num_rows, int num_cols){
+	// printf("Entered Horiz\n");
 	int i;
-	int row = command[1] - '0';
-	int col1 = command[2] -'0';
-	int col2 = command[4] - '0';
+	int row = atoi(command[1]);
+	int col1 = atoi(command[2]);
+	int col2 = atoi(command[4]);
+
 	if(col1 <= col2){ 
 		for(i = col1; i <= col2; ++i){
 			if(board[row][i] == '-'){
@@ -56,11 +64,13 @@ void draw_hor(char* command, char** board, int num_rows, int num_cols){
 }
 
 //Draws a vertical line
-void draw_ver(char* command, char** board, int num_rows, int num_cols){
+void draw_ver(char** command, char** board, int num_rows, int num_cols){
+	// printf("Entered Ver\n");
 	int i;
-	int col = command[2] - '0';
-	int row1 = command[1] -'0';
-	int row2 = command[3] - '0';
+	int col = atoi(command[2]);
+	int row1 = atoi(command[1]);
+	int row2 = atoi(command[3]);
+
 	if(row1 <= row2){ 
 		for(i = row1; i <= row2; ++i){
 			if(board[i][col] == '|'){
@@ -72,6 +82,7 @@ void draw_ver(char* command, char** board, int num_rows, int num_cols){
 			}
 		}
 	}
+
 	if(row1 > row2){ 
 		for(i = row2; i <= row1; ++i){
 			if(board[i][col] == '|'){
@@ -86,12 +97,13 @@ void draw_ver(char* command, char** board, int num_rows, int num_cols){
 }
 
 //Draws a left to right negative slope line
-void draw_zig(char* command, char** board, int num_rows, int num_cols){
+void draw_zig(char** command, char** board, int num_rows, int num_cols){
+	// printf("Entered Zig\n");
 	int i;
-	int row1 = command[1] -'0';
-	//int row2 = command[3] -'0';
-	int col1 = command[2] -'0';
-	int col2 = command[4] -'0';
+	int row1 = atoi(command[1]) ;
+	//int row2 = command[3] ;
+	int col1 = atoi(command[2]) ;
+	int col2 = atoi(command[4]) ;
 	if(col1 < col2){
 		for(i = col1; i <= col2; ++i){
 			if(board[row1][i] == '\\'){
@@ -118,12 +130,13 @@ void draw_zig(char* command, char** board, int num_rows, int num_cols){
 }
 
 //Draws a left to right positive slope line
-void draw_zag(char* command, char** board, int num_rows, int num_cols){
+void draw_zag(char** command, char** board, int num_rows, int num_cols){
+	// printf("Entered Zag\n");
 	int i;
-	int row1 = command[1] -'0';
-	int row2 = command[3] -'0';
-	int col1 = command[2] -'0';
-	int col2 = command[4] -'0';
+	int row1 = atoi(command[1]) ;
+	int row2 = atoi(command[3]);
+	int col1 = atoi(command[2]) ;
+	int col2 = atoi(command[4]) ;
 
 	if(row1 < row2){
 		for(i = col1; i <= col2; ++i){
