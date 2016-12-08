@@ -13,7 +13,7 @@ draw.o: draw.c draw.h board.h
 user_interface.o: user_interface.c user_interface.h save.h
 	gcc -g -Wall -Werror -c -o user_interface.o user_interface.c
 
-save.o: save.c save.h board.h
+save.o: save.c save.h board.h user_interface.h
 	gcc -g -Wall -Werror -c -o save.o save.c
 	
 clean:

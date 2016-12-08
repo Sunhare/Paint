@@ -342,7 +342,7 @@ void get_command(char** board, int num_rows, int num_cols){
 	}
 	else if(command[0][0] == 'l'){
 		input_incorrect(board, num_rows, num_cols, command, 2, "Improper load command or file could not be created.");
-		save_file(board, num_rows, num_cols, command[1]);
+		load_file(board, num_rows, num_cols, command[1]);
 		print_board(board, num_rows, num_cols);
 		get_command(board, num_rows, num_cols);
 	}
